@@ -32,7 +32,7 @@ class KuwaitDataLoader:
 
 
     def load(self, group):
-        cases_col, swabs_col = GROUPS[group]
+        swabs_col, cases_col = GROUPS[group]
 
         sdf = self.df[['date', cases_col, swabs_col]].copy()
         sdf.columns = ['date', 'cases', 'swabs']
