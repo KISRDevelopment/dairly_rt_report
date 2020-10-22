@@ -3,17 +3,19 @@ import numpy as np
 
 class Aggregator:
 
-    def __init__(self, n_days=7):
-        self.n_days = n_days
+    def __init__(self):
+        pass
+    def run(self, df, n_days):
 
-    def run(self, df):
+        if n_days == 1:
+            return df 
 
         agg_rows = []
         curr_day = 0
         for i, r in df.iterrows():
 
             # create new row 
-            if curr_day % self.n_days == 0:
+            if curr_day % n_days == 0:
                 row = {}
                 row['date'] = r['date']
                 row['cases'] = r['cases']
@@ -27,7 +29,7 @@ class Aggregator:
             curr_day += 1
         
         # drop incomplete data
-        if curr_day % self.n_days != 0:
+        if curr_day % n_days != 0:
             agg_rows = agg_rows[:-1]
         
         agg_df = pd.DataFrame(agg_rows)
@@ -36,22 +38,22 @@ class Aggregator:
 
 class SamplingCorrector:
 
-    def __init__(self, adjust_for_swabs=False):
-        self.adjust_for_swabs = adjust_for_swabs
-    
-    def run(self, df):
+    def __init__(self):
+        pass
+    def run(self, df, adjust_for_swabs):
         orig_case_counts = np.array(df['cases'])
     
         case_counts = np.array(df['cases'])
         
         swabs = np.array(df['swabs'])
         
-        if self.adjust_for_swabs:
-            ix_not_nan = ~np.isnan(swabs)
+        ix_not_nan = ~np.isnan(swabs)
+
+        if adjust_for_swabs and np.sum(ix_not_nan) > 0:
             baseline_swabs = swabs[np.where(ix_not_nan)[0][0]]
             case_counts[ix_not_nan] = (case_counts[ix_not_nan] / swabs[ix_not_nan]) * baseline_swabs
             case_counts = case_counts.astype(int)
-
+    
         case_counts[case_counts == 0] = 1
 
         df['orig_cases'] = orig_case_counts
@@ -68,11 +70,11 @@ def main():
     df = loader.load('all')
     
     proc_agg = Aggregator()
-    df = proc_agg.run(df)
+    df = proc_agg.run(df, 7)
     print(df)
     
-    proc_corr = SamplingCorrector(True)
-    print(proc_corr.run(df))
+    proc_corr = SamplingCorrector()
+    print(proc_corr.run(df, True))
 
 if __name__ == "__main__":
     main()

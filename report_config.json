@@ -1,0 +1,89 @@
+{
+    "props" : {
+        "aggregate" : 1,
+        "adjust_for_swabs" : false,
+        "distrib" : "lognormal",
+        "mean" : 4.9,
+        "std" : 2.7
+    },
+    "dfs" : {
+        "kw-lab" : {
+            "source" : "kw",
+            "group" : "all",
+            "title" : "Kuwait (Lab)"
+        },
+        "kuwaitis" : {
+            "source" : "kw",
+            "group" : "kw",
+            "title" : "Kuwaiti Citizens (Lab)"
+        },
+        "nonkuwaitis" : {
+            "source" : "kw",
+            "group" : "nonkw",
+            "title" : "Non-Kuwaiti Citizens (Lab)"
+        },
+        "kw-lab-adj" : {
+            "source" : "kw",
+            "group" : "all",
+            "title" : "Kuwait (Lab) - Adjusted",
+            "adjust_for_swabs" : true
+        },
+        "kuwaitis-adj" : {
+            "source" : "kw",
+            "group" : "kw",
+            "title" : "Kuwaiti Citizens (Lab) - Adjusted",
+            "adjust_for_swabs" : true
+        },
+        "nonkuwaitis-adj" : {
+            "source" : "kw",
+            "group" : "nonkw",
+            "title" : "Non-Kuwaiti Citizens (Lab) - Adjusted",
+            "adjust_for_swabs" : true
+        },
+        "sa" : {
+            "source" : "global",
+            "group" : "Saudi Arabia",
+            "title" : "Saudi Arabia"
+        },
+        "bh" : {
+            "source" : "global",
+            "group" : "Bahrain",
+            "title" : "Bahrain"
+        },
+        "qa" : {
+            "source" : "global",
+            "group" : "Qatar",
+            "title" : "Qatar"
+        },
+        "ae" : {
+            "source" : "global",
+            "group" : "United Arab Emirates",
+            "title" : "UAE"
+        },
+        "om" : {
+            "source" : "global",
+            "group" : "Oman",
+            "title" : "Oman"
+        },
+        "iq" : {
+            "source" : "global",
+            "group" : "Iraq",
+            "title" : "Iraq"
+        },
+        "ir" : {
+            "source" : "global",
+            "group" : "Iran",
+            "title" : "Iran"
+        },
+        "de" : {
+            "source" : "global",
+            "group" : "Germany",
+            "title" : "Germany"
+        },
+        "se" : {
+            "source" : "global",
+            "group" : "Sweden",
+            "title" : "Sweden"
+        }
+    }
+}
