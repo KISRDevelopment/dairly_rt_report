@@ -13,7 +13,7 @@ gt_params = c(gt_distrib_mean, gt_distrib_std)
 # ML Estimate
 covid <- read.table(input_path, sep=",", header=TRUE)
 n_days <- nrow(covid)
-COVID19<-covid$CaseCounter
+COVID19<-covid$cases
 epid.count=COVID19
 GT.mers<-generation.time(gt_distrib, gt_params)
 est.GT(serial.interval=COVID19,request.plot=FALSE)

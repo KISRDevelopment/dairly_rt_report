@@ -58,7 +58,7 @@ class SamplingCorrector:
 
         df['orig_cases'] = orig_case_counts
         df['ppos'] = orig_case_counts / swabs
-        df['adjusted'] = ix_not_nan
+        df['adjusted'] = ix_not_nan * adjust_for_swabs
         df['cases'] = case_counts
     
         return df

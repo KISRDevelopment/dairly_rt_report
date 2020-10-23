@@ -1,9 +1,3 @@
-#
-# compute_rt.py - Computes Time Dependent Reproductive Number
-# Mohammad M Khajah <mmkhajah@kisr.edu.kw>
-#
-# provides a wrapper interface over the R script that computes R(t).
-#
 import numpy as np 
 import subprocess 
 import json 
@@ -13,23 +7,11 @@ import os
 import scipy.stats as stats
 
 def main():
-
+    
     df = pd.read_excel('data/allcases.xlsx')
-    days = 7
-    gt_distrib_mean = 4.7 # in days
-    gt_distrib_std = 2.9 # in days
 
-    mu_x, std_x = adjust_lognormal_params(gt_distrib_mean, gt_distrib_std, 7)
-    
-    agg_df = aggregate_df(df, days, date_col='Date', case_col='Positives Kuwait', swabs_col='Swabs Kuwait')
-    
-    
-    r = compute_rt(agg_df, case_col='Positives Kuwait', swabs_col='Swabs Kuwait', adjust_for_swabs=False,
-        gt_distrib_mean = mu_x,
-        gt_distrib_std = std_x
-    )
-
-    print(r)
+    rdf = compute_rt(df, date_col='Date', case_col='Positives Kuwait')
+    rdf.to_csv('data/tmp.csv',index=False)
     
 def adjust_lognormal_params(mu_x, std_x, days):
 
@@ -42,61 +24,17 @@ def adjust_lognormal_params(mu_x, std_x, days):
 
     return (new_mu_x, std_x)
 
-def aggregate_df(df, days, date_col, case_col, swabs_col):
-
-    agg_rows = []
-    curr_day = 0
-    for i, r in df.iterrows():
-
-        # create new row 
-        if curr_day % days == 0:
-            row = {}
-            row[date_col] = r[date_col]
-            row[case_col] = r[case_col]
-            row[swabs_col] = r[swabs_col]
-            agg_rows.append(row)
-        else:
-            row = agg_rows[-1]
-            row[case_col] += r[case_col]
-            row[swabs_col] += r[swabs_col]
-        
-        curr_day += 1
-    
-    # drop incomplete data
-    if curr_day % days != 0:
-        agg_rows = agg_rows[:-1]
-    
-    agg_df = pd.DataFrame(agg_rows)
-
-    return agg_df
-
 def compute_rt( df, 
-                date_col = 'Date', 
-                case_col = 'CaseCounter', 
-                swabs_col = 'CaseCounter',
-                adjust_for_swabs = False,
+                date_col = 'date', 
+                case_col = 'cases',
                 gt_distrib = 'lognormal',
                 gt_distrib_mean = 4.7,
                 gt_distrib_std = 2.9, **kwargs):
 
-    orig_case_counts = np.array(df[case_col])
     
-    case_counts = np.array(df[case_col])
+    cases = np.array(df[case_col])
     
-    swabs = np.array(df[swabs_col])
-    
-    if adjust_for_swabs:
-        
-        ix_not_nan = ~np.isnan(swabs)
-        baseline_swabs = swabs[np.where(ix_not_nan)[0][0]]
-        case_counts[ix_not_nan] = (case_counts[ix_not_nan] / swabs[ix_not_nan]) * baseline_swabs
-        case_counts = case_counts.astype(int)
-    else:
-        ix_not_nan = np.zeros(df.shape[0]).astype(bool)
-    
-    case_counts[case_counts == 0] = 1
-
-    input_df = pd.DataFrame({ "CaseCounter" : case_counts })
+    input_df = pd.DataFrame({ "cases" : cases })
 
     input_path = str(uuid.uuid4())
     output_path = input_path + "_result"
@@ -117,10 +55,7 @@ def compute_rt( df,
     os.remove(output_path)
 
     result_df.columns = ["id", "y", "yhat", "r", "r_lower", "r_upper", "mean_r0", "mean_r0_lower", "mean_r0_upper"]
-    result_df['date'] = np.array(df[date_col])
-    result_df['adjusted'] = ix_not_nan
-    result_df['orig_y'] = orig_case_counts
-    result_df['swabs'] = swabs
+    result_df = pd.concat([result_df, df], axis=1)
     
     return result_df
     

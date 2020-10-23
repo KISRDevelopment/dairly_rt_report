@@ -42,14 +42,14 @@ class JohnsHopkinsDataLoader:
 
     def __init__(self, url):
 
-        # r = requests.get(url)
-        # if r.ok:
-        #     data = r.content.decode('utf8')
-        #     global_df = pd.read_csv(io.StringIO(data))
-        # else:
-        #     raise Exception("Couldn't fetch data")
+        r = requests.get(url)
+        if r.ok:
+            data = r.content.decode('utf8')
+            global_df = pd.read_csv(io.StringIO(data))
+        else:
+            raise Exception("Couldn't fetch data")
 
-        global_df = pd.read_csv('data/glob.csv')
+        #global_df = pd.read_csv('data/glob.csv')
 
         cols = global_df.columns[4:]
         self.df = global_df
