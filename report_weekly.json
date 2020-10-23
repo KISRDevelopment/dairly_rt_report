@@ -1,18 +1,21 @@
 {
     "props" : {
-        "aggregate" : 1,
+        "aggregate" : 7,
         "adjust_for_swabs" : false,
         "distrib" : "lognormal",
         "mean" : 4.9,
         "std" : 2.7,
-        "show_swabs" : false
+        "show_swabs" : false,
+        "in_overview" : false
     },
     "dfs" : {
         "kw-lab" : {
             "source" : "kw",
             "group" : "all",
             "title" : "Kuwait (Lab)",
-            "show_swabs" : true
+            "show_swabs" : true,
+            "in_overview" : true,
+            "color" : "blue"
         },
         "kuwaitis" : {
             "source" : "kw",
@@ -31,7 +34,9 @@
             "group" : "all",
             "title" : "Kuwait (Lab) - Adjusted",
             "adjust_for_swabs" : true,
-            "show_swabs" : true
+            "show_swabs" : true,
+            "in_overview" : true,
+            "color" : "#9000ff"
         },
         "kuwaitis-adj" : {
             "source" : "kw",
@@ -50,27 +55,37 @@
         "sa" : {
             "source" : "global",
             "group" : "Saudi Arabia",
-            "title" : "Saudi Arabia"
+            "title" : "Saudi Arabia",
+            "in_overview" : true,
+            "color" : "green"
         },
         "bh" : {
             "source" : "global",
             "group" : "Bahrain",
-            "title" : "Bahrain"
+            "title" : "Bahrain",
+            "in_overview" : true,
+            "color" : "red"
         },
         "qa" : {
             "source" : "global",
             "group" : "Qatar",
-            "title" : "Qatar"
+            "title" : "Qatar",
+            "in_overview" : true,
+            "color" : "#800000"
         },
         "ae" : {
             "source" : "global",
             "group" : "United Arab Emirates",
-            "title" : "UAE"
+            "title" : "UAE",
+            "in_overview" : true,
+            "color" : "black"
         },
         "om" : {
             "source" : "global",
             "group" : "Oman",
-            "title" : "Oman"
+            "title" : "Oman",
+            "in_overview" : true,
+            "color" : "orange"
         },
         "iq" : {
             "source" : "global",

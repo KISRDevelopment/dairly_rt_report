@@ -6,17 +6,86 @@ from matplotlib.dates import DateFormatter
 
 plt.rcParams["font.family"] = "Liberation Serif"
 plt.rcParams["font.weight"] = "bold"
+
+plot_cfg = {
+    "tick_label_size" : 32,
+    "axis_label_size" : 38,
+    "capthick" : 5,
+    "capsize" : 10,
+    "elinewidth" : 5,
+    "markersize" : 10,
+    "annot_size" : 28,
+    "title_size" : 38,
+    "suptitle_size" : 42,
+    "legend_size" : 24
+}
+def overview_stats(overview_df, output_path):
+    
+    f, axes = plt.subplots(2, 1, figsize=(10, 20))
+
+    errors = np.array(overview_df[['rt_lower', 'rt_upper']]).T
+    errors[0,:] = overview_df['rt'] - errors[0,:]
+    errors[1,:] = errors[1,:] - overview_df['rt']
+
+    ax = axes[0]
+    ax.plot([1.0, 1.0], [-0.5, overview_df.shape[0]-0.5], linewidth=5, color='magenta', linestyle='--')
+    for i in range(overview_df.shape[0]):
+        ax.errorbar(y = [i], x = [overview_df.iloc[i]['rt']], 
+            xerr=errors[:,i][:,np.newaxis], 
+            fmt='o',
+            color=overview_df.iloc[i]['color'], 
+            capthick=plot_cfg['capthick'], 
+            capsize=plot_cfg['capsize'], 
+            elinewidth=plot_cfg['elinewidth'], 
+            markersize=plot_cfg['markersize'])
+    ax.set_yticks(np.arange(overview_df.shape[0]))
+    ax.set_yticklabels(overview_df['title'])
+    ax.tick_params(axis='x', labelsize=plot_cfg['tick_label_size'])
+    ax.tick_params(axis='y', labelsize=plot_cfg['tick_label_size'])
+    ax.set_xlabel('Latest R(t)', fontsize=plot_cfg['axis_label_size'], fontweight='bold')
+    ax.set_ylabel('')
+    ax.set_xlim([0, 3])
+    ax.set_xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+    xlims = ax.get_xlim()
+    ax.grid(linestyle='-.', which='both')
+
+    ax = axes[1]
+    errors = np.array(overview_df[['mean_r0_lower', 'mean_r0_upper']]).T
+    errors[0,:] = overview_df['mean_r0'] - errors[0,:]
+    errors[1,:] = errors[1,:] - overview_df['mean_r0']
+    ax.plot([1.0, 1.0], [-0.5, overview_df.shape[0]-0.5], linewidth=5, color='magenta', linestyle='--')
+    for i in range(overview_df.shape[0]):
+        ax.errorbar(y = [i], x = [overview_df.iloc[i]['mean_r0']], 
+            xerr=errors[:,i][:,np.newaxis], 
+            fmt='o',
+            color=overview_df.iloc[i]['color'], 
+            capthick=plot_cfg['capthick'], 
+            capsize=plot_cfg['capsize'], 
+            elinewidth=plot_cfg['elinewidth'], 
+            markersize=plot_cfg['markersize'])
+    ax.set_yticks(np.arange(overview_df.shape[0]))
+    ax.set_yticklabels(overview_df['title'])
+    ax.tick_params(axis='x', labelsize=plot_cfg['tick_label_size'])
+    ax.tick_params(axis='y', labelsize=plot_cfg['tick_label_size'])
+    ax.set_xlabel('Average R0', fontsize=plot_cfg['axis_label_size'], fontweight='bold')
+    ax.set_ylabel('')
+    ax.set_xlim(xlims)
+    ax.set_xticks([0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0])
+    ax.grid(linestyle='-.', which='both')
+
+    plt.savefig(output_path,  pad_inches=0.1,bbox_inches='tight')
+
 def tdr(result_df, title, output_path, 
            show_swabs=True, 
            with_labels=True, 
-           labelsize=18, 
-           axis_labelsize=24, 
-           annot_size=24, 
-           title_size=28, 
-           suptitle_size=36, 
-           markersize=10, 
-           linewidth=5, 
-           legend_size=24, **kwargs):
+           labelsize=plot_cfg['tick_label_size'], 
+           axis_labelsize=plot_cfg['axis_label_size'], 
+           annot_size=plot_cfg['annot_size'], 
+           title_size=plot_cfg['title_size'], 
+           suptitle_size=plot_cfg['suptitle_size'], 
+           markersize=plot_cfg['markersize'], 
+           linewidth=plot_cfg['elinewidth'], 
+           legend_size=plot_cfg['legend_size'], **kwargs):
 
     result_df['date'] = pd.to_datetime(result_df['date'])
     annot_idx = -1
@@ -136,6 +205,6 @@ def tdr(result_df, title, output_path,
 
     plt.suptitle(title, fontsize=suptitle_size, fontweight='bold')
     
-    plt.savefig(output_path,  pad_inches=0.1,bbox_inches='tight')
+    plt.savefig(output_path,  pad_inches=0.1 ,bbox_inches='tight')
     
     plt.close()
