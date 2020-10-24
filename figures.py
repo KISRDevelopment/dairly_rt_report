@@ -85,7 +85,8 @@ def tdr(result_df, title, output_path,
            suptitle_size=plot_cfg['suptitle_size'], 
            markersize=plot_cfg['markersize'], 
            linewidth=plot_cfg['elinewidth'], 
-           legend_size=plot_cfg['legend_size'], **kwargs):
+           legend_size=plot_cfg['legend_size'],
+           show_ppos=True, **kwargs):
 
     result_df['date'] = pd.to_datetime(result_df['date'])
     annot_idx = -1
@@ -191,17 +192,21 @@ def tdr(result_df, title, output_path,
         ax.set_title('Daily Swabs', fontsize=title_size, fontweight='bold')
         ax.tick_params(axis='x', labelsize=labelsize)
         ax.tick_params(axis='y', labelsize=labelsize)
-        plt.setp(ax.get_xticklabels(), visible=False)
+        
+        if show_ppos:
+            plt.setp(ax.get_xticklabels(), visible=False)
 
-        ax = fig.add_subplot(spec[3], sharex=ax)
-        ppos = np.array(result_df['ppos']) * 100
-        ax.plot(dates, ppos, 'o-', color='#9000ff')
-        ax.tick_params(axis='x', labelsize=labelsize)
-        ax.tick_params(axis='y', labelsize=labelsize)
-        ax.set_ylabel('%', fontsize=axis_labelsize, fontweight='bold')
-        ax.grid(linestyle='-.', which='both')
+            ax = fig.add_subplot(spec[3], sharex=ax)
+            ppos = np.array(result_df['ppos']) * 100
+            ax.plot(dates, ppos, 'o-', color='#9000ff')
+            ax.tick_params(axis='x', labelsize=labelsize)
+            ax.tick_params(axis='y', labelsize=labelsize)
+            ax.set_ylabel('%', fontsize=axis_labelsize, fontweight='bold')
+            ax.grid(linestyle='-.', which='both')
+            
+            ax.set_title('Percent Positive', fontsize=title_size, fontweight='bold')
+        
         ax.xaxis.set_major_formatter(date_form)
-        ax.set_title('Percent Positive', fontsize=title_size, fontweight='bold')
 
     plt.suptitle(title, fontsize=suptitle_size, fontweight='bold')
     

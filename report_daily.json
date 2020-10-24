@@ -1,4 +1,6 @@
 {
+    "name" : "report_daily",
+    "title" : "Daily Reproductive Number Report",
     "props" : {
         "aggregate" : 1,
         "adjust_for_swabs" : false,
@@ -6,7 +8,8 @@
         "mean" : 4.9,
         "std" : 2.7,
         "show_swabs" : false,
-        "in_overview" : false
+        "in_overview" : false,
+        "show_ppos" : false
     },
     "dfs" : {
         "kw-lab" : {

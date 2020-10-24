@@ -7,11 +7,16 @@ import compute_rt
 import figures
 from string import Template
 import datetime 
-
+import sys 
+import os 
 def main():
+    path = sys.argv[1]
 
-    with open('report_weekly.json', 'r') as f:
+    with open(path, 'r') as f:
         cfg = json.load(f)
+    
+    if not os.path.isdir('./tmp/%s' % cfg['name']):
+        os.mkdir('./tmp/%s' % cfg['name'])
     
     cfg = finalize_props(cfg)
     
@@ -55,7 +60,7 @@ def compute_tdr(cfg):
         rdf = compute_rt.compute_rt(df, date_col='date', cases_col='cases', 
             gt_distrib=final_props['distrib'], 
             gt_distrib_mean=mu_x, gt_distrib_std=std_x)
-        rdf.to_csv('tmp/%s.csv' % name, index=False)
+        rdf.to_csv('tmp/%s/%s.csv' % (cfg['name'], name), index=False)
 
         
 
@@ -66,7 +71,7 @@ def compute_overview(cfg):
         if not props['in_overview']:
             continue 
         
-        rdf = pd.read_csv('tmp/%s.csv' % name)
+        rdf = pd.read_csv('tmp/%s/%s.csv' % (cfg['name'], name))
 
         rows.append({
             "name" : name, 
@@ -82,16 +87,16 @@ def compute_overview(cfg):
         })
 
     overview_df = pd.DataFrame(rows)
-    overview_df.to_csv('tmp/overview.csv', index=False)
+    overview_df.to_csv('tmp/%s/overview.csv' % cfg['name'], index=False)
 
 def make_tdr_figures(cfg):
     for name, props in cfg['dfs'].items():
-        rdf = pd.read_csv('tmp/%s.csv' % name)
-        figures.tdr(rdf, props['title'], 'tmp/%s.png' % name, show_swabs=props['show_swabs'])
+        rdf = pd.read_csv('tmp/%s/%s.csv' % (cfg['name'], name))
+        figures.tdr(rdf, props['title'], 'tmp/%s/%s.png' % (cfg['name'], name), show_swabs=props['show_swabs'], show_ppos=props['show_ppos'])
 
 def make_overview_figures(cfg):
-    overview_df = pd.read_csv('tmp/overview.csv')
-    figures.overview_stats(overview_df, 'tmp/overview.png')
+    overview_df = pd.read_csv('tmp/%s/overview.csv' % cfg['name'])
+    figures.overview_stats(overview_df, 'tmp/%s/overview.png' % cfg['name'])
 
 def make_report(cfg):
 
@@ -100,13 +105,13 @@ def make_report(cfg):
     template_html = """
 <section class="sheet padding-10mm">
     <article>
-    <h1>Reproductive Number Report</h1>
+    <h1>%s</h1>
     <h2>As of %s</h2>
     <br>
     <img src="./overview.png" style="height: 768px; margin: auto; display: block" />
     </article>
     </section>
-    """ % today_date.strftime("%d %B %Y")
+    """ % (cfg['title'], today_date.strftime("%d %B %Y"))
 
     for name, props in cfg['dfs'].items():
         template_html += """
@@ -124,7 +129,7 @@ def make_report(cfg):
 
     result = t.substitute(body=template_html)
     
-    with open('tmp/r0td_report.html', 'w') as f:
+    with open('tmp/%s/r0td_report.html' % cfg['name'], 'w') as f:
         f.write(result)
 if __name__ == "__main__":
     main()
