@@ -9,7 +9,7 @@
         "std" : 2.7,
         "show_swabs" : false,
         "in_overview" : false,
-        "show_ppos" : false
+        "show_ppos" : true
     },
     "dfs" : {
         "kw-lab" : {
