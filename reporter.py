@@ -57,11 +57,11 @@ def compute_tdr(cfg):
             else:
                 raise Exception("Cannot aggregate with distributions other than lognormal")
         
+        
         rdf = compute_rt.compute_rt(df, date_col='date', cases_col='cases', 
             gt_distrib=final_props['distrib'], 
             gt_distrib_mean=mu_x, gt_distrib_std=std_x)
         rdf.to_csv('tmp/%s/%s.csv' % (cfg['name'], name), index=False)
-
         
 
 def compute_overview(cfg):

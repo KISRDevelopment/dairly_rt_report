@@ -31,7 +31,6 @@ def compute_rt( df,
                 gt_distrib_mean = 4.7,
                 gt_distrib_std = 2.9, **kwargs):
 
-    
     cases = np.array(df[case_col])
     
     input_df = pd.DataFrame({ "cases" : cases })

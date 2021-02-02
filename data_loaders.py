@@ -15,7 +15,7 @@ class KuwaitDataLoader:
         base_df = pd.read_excel(base_path)
         base_df['date'] = pd.to_datetime(base_df['date'])
 
-        swabs_df = pd.read_excel(swabs_path, header=5)
+        swabs_df = pd.read_excel(swabs_path, header=2)
         swabs_df = swabs_df[:-1]
         
         top = base_df
@@ -29,13 +29,15 @@ class KuwaitDataLoader:
         })
         
         self.df = top.append(bottom, ignore_index=True)
-
+        self.df.sort_values(by='date', inplace=True)
+        self.df.index = np.arange(self.df.shape[0])
 
     def load(self, group):
         swabs_col, cases_col = GROUPS[group]
 
         sdf = self.df[['date', cases_col, swabs_col]].copy()
         sdf.columns = ['date', 'cases', 'swabs']
+        
         return sdf
 
 class JohnsHopkinsDataLoader:
@@ -84,19 +86,19 @@ def main():
     df = loader.load('all')
     print(df)
 
-    df = loader.load('kw')
-    print(df)
+    # df = loader.load('kw')
+    # print(df)
 
-    df = loader.load('nonkw')
-    print(df)
+    # df = loader.load('nonkw')
+    # print(df)
 
-    loader = JohnsHopkinsDataLoader("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
-    df = loader.load('Germany')
-    print(df)
+    # loader = JohnsHopkinsDataLoader("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
+    # df = loader.load('Germany')
+    # print(df)
 
-    df = loader.load('US')
-    print(df)
-    loader.store('data/global.csv')
+    # df = loader.load('US')
+    # print(df)
+    # loader.store('data/global.csv')
 
 if __name__ == "__main__":
     main()
