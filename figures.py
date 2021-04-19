@@ -169,11 +169,11 @@ def tdr(result_df, title, output_path,
 
     if with_labels:
         ax.annotate(pred_str, xy=(dates[-1], yhat[-1]),  xycoords='data',
-                    xytext=(.98, .9), textcoords='axes fraction',
+                    xytext=(.98, 0), textcoords='axes fraction',
                     fontweight='bold',
                     arrowprops=dict(color='grey', width=3, shrink=0.05),
                     fontsize=annot_size,
-                    horizontalalignment='right', verticalalignment='top',)
+                    horizontalalignment='right', verticalalignment='bottom',)
     
     
     #
