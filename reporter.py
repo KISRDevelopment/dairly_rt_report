@@ -9,15 +9,16 @@ from string import Template
 import datetime 
 import sys 
 import os 
+from pathlib import Path
+
 def main():
     path = sys.argv[1]
 
     with open(path, 'r') as f:
         cfg = json.load(f)
     
-    if not os.path.isdir('./tmp/%s' % cfg['name']):
-        os.mkdir('./tmp/%s' % cfg['name'])
-    
+    Path('./tmp/%s' % cfg['name']).mkdir(parents=True, exist_ok=True)
+
     cfg = finalize_props(cfg)
     
     compute_tdr(cfg)
@@ -37,7 +38,7 @@ def finalize_props(cfg):
 
 def compute_tdr(cfg):
 
-    kw_loader = data_loaders.KuwaitDataLoader('base_kuwait_data.xlsx', 'data/Swabs Processed.xlsx')
+    kw_loader = data_loaders.KuwaitDataLoader('base_kuwait_data.xlsx', 'Swabs Processed.xlsx')
     glob_loader = data_loaders.JohnsHopkinsDataLoader("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv")
     aggregator = data_processors.Aggregator()
     sample_corrector = data_processors.SamplingCorrector()

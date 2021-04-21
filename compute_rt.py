@@ -4,7 +4,6 @@ import json
 import pandas as pd 
 import uuid 
 import os 
-import scipy.stats as stats
 
 def main():
     
