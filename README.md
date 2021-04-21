@@ -2,6 +2,10 @@
 
 This repository contains Python and R code that KISR and Kuwait University have developed to compute the time-dependent reproductive number R(t). 
 
+Authors:
+- Python: Mohammad Khajah <mmkhajah@kisr.edu.kw>
+- R: Mohammad Al-Khamis <m.alkhamis@hsc.edu.kw>
+
 ## Installation Instructions
 
 1. Install R 
