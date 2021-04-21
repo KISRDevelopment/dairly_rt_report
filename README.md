@@ -1,6 +1,6 @@
 # Time-Dependent Reproductive Number Reporter
 
-This repository contains Python and R code that computes the time-dependent reproductive number R(t). It supports daily and arbitrary daily aggregation of the data (e.g., weekly, 3-days, etc.).
+This repository contains Python and R code that KISR and Kuwait University have developed to compute the time-dependent reproductive number R(t). 
 
 ## Installation Instructions
 
@@ -35,7 +35,7 @@ For the daily report:
 $ python reporter.py report_daily.json
 ```
 4. This command will create an HTML report page at `daily_rt_report/tmp/report_weekly/r0td_report.html`.
-5. Open the file in Google Chrome and print it to PDF.
+5. Open the HTML page in Google Chrome and print it to PDF.
 
 ## Report parameters
 
